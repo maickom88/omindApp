@@ -4,7 +4,6 @@ import 'package:omindconsluting/Screens/Signup/signup_screen.dart';
 import 'package:omindconsluting/Screens/Welcome/components/background.dart';
 import 'package:omindconsluting/components/rounded_button.dart';
 import 'package:omindconsluting/constants.dart';
-import 'package:flutter_svg/svg.dart';
 
 class Body extends StatelessWidget {
   @override
@@ -23,7 +22,6 @@ class Body extends StatelessWidget {
             SizedBox(height: size.height * 0.05),
             Image.asset(
               "assets/images/mindlogo.jpg",
-
             ),
             SizedBox(height: size.height * 0.05),
             RoundedButton(

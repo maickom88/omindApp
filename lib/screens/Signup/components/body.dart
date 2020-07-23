@@ -8,7 +8,6 @@ import 'package:omindconsluting/components/rounded_button.dart';
 import 'package:omindconsluting/components/rounded_input_field.dart';
 import 'package:omindconsluting/components/rounded_password_field.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:omindconsluting/screens/Dashboard.dart';
 
 class Body extends StatelessWidget {
@@ -49,14 +48,15 @@ class Body extends StatelessWidget {
 //                Navigator.pushNamed(context, MenuDashboardPage.id);
 //              print(email);
 //              print(password);
-             try{
-               final newUser = await  _auth.createUserWithEmailAndPassword(email: email, password: password);
-               if(newUser != null){
-                   Navigator.pushNamed(context, MenuDashboardPage.id);
-               }
-             }catch(e){
-               print(e);
-             }
+                try {
+                  final newUser = await _auth.createUserWithEmailAndPassword(
+                      email: email, password: password);
+                  if (newUser != null) {
+                    Navigator.pushNamed(context, MenuDashboardPage.id);
+                  }
+                } catch (e) {
+                  print(e);
+                }
               },
             ),
             SizedBox(height: size.height * 0.03),
