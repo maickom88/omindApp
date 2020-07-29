@@ -5,12 +5,7 @@ import 'package:omindconsluting/controllers/questions_controller.dart';
 import 'cards_list.dart';
 import 'dialog_details.dart';
 
-class Body extends StatefulWidget {
-  @override
-  _BodyState createState() => _BodyState();
-}
-
-class _BodyState extends State<Body> {
+class Body extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final double _height = MediaQuery.of(context).size.height;
@@ -56,28 +51,29 @@ class _BodyState extends State<Body> {
             SizedBox(height: _height * 0.10),
             Expanded(
               child: GetBuilder<QuestionsController>(
-                  init: QuestionsController(),
-                  builder: (controller) {
+                init: QuestionsController(),
+                builder: (controller) {
+                  if (controller.questions != null) {
+                    return ListView.builder(
+                      physics: BouncingScrollPhysics(),
+                      itemCount: controller.questions.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        return CardsList(
+                          titleQuestion:
+                              controller.questions[index].data['LifePackName'],
+                          desQuestion:
+                              controller.questions[index].data['Description'],
+                        );
+                      },
+                    );
+                  } else {
                     controller.getQuantQuestions();
-                    if (controller.questions != null) {
-                      return ListView.builder(
-                        physics: BouncingScrollPhysics(),
-                        itemCount: controller.questions.length,
-                        itemBuilder: (BuildContext context, int index) {
-                          return CardsList(
-                            titleQuestion: controller
-                                .questions[index].data['LifePackName'],
-                            desQuestion:
-                                controller.questions[index].data['Description'],
-                          );
-                        },
-                      );
-                    } else {
-                      return Center(
-                        child: CircularProgressIndicator(),
-                      );
-                    }
-                  }),
+                    return Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+                },
+              ),
             )
           ],
         ),

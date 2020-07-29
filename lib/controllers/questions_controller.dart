@@ -7,7 +7,7 @@ class QuestionsController extends GetxController {
   IFirestoreRepository firestoreRepository = Get.put(FirestoreRepository());
   List<DocumentSnapshot> questions;
   DocumentSnapshot questionsData;
-
+  static QuestionsController get to => Get.find();
   void getQuantQuestions() async {
     questions = await firestoreRepository.getQuestions();
     update();
@@ -22,9 +22,5 @@ class QuestionsController extends GetxController {
     } catch (e) {
       print('error controller $e');
     }
-
-    questionsData.data.forEach((key, value) {
-      if (key.contains('option')) {}
-    });
   }
 }

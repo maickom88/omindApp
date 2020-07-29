@@ -44,9 +44,7 @@ class _CardsListState extends State<CardsList> {
         ),
         trailing: IconButton(
           icon: Icon(Icons.person, color: Colors.white),
-          onPressed: () {
-            
-          },
+          onPressed: () {},
         ),
       ),
     );
