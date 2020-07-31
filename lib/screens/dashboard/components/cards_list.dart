@@ -1,15 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:omindconsluting/screens/question/question_page.dart';
-
+import '../../../controllers/questions_controller.dart';
 import 'dialog_details.dart';
 
 class CardsList extends StatefulWidget {
   final Function press;
   final String titleQuestion;
   final String desQuestion;
+  final String documentId;
 
-  const CardsList({Key key, this.press, this.titleQuestion, this.desQuestion})
+  const CardsList(
+      {Key key,
+      this.press,
+      this.titleQuestion,
+      this.desQuestion,
+      this.documentId})
       : super(key: key);
 
   @override
@@ -23,10 +29,12 @@ class _CardsListState extends State<CardsList> {
       color: Color(0xFFDB9B10),
       child: ListTile(
         onTap: () {
+          QuestionsController.to.getQuestions(widget.documentId);
           Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => QuestionPage(),
+                builder: (context) =>
+                    QuestionPage(documentID: widget.documentId),
               ));
         },
         leading: IconButton(

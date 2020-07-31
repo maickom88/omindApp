@@ -6,9 +6,9 @@ class FirestoreRepository extends IFirestoreRepository {
     try {
       return Firestore.instance
           .collection('Lifepacks')
-          .document('RDCEEILSCoY0eHd8ncUb')
-          .collection('Questions')
           .document(documentId)
+          .collection('Questions')
+          .document('vRawzyDZxZcDe0g03xlk')
           .snapshots();
     } catch (e) {
       print('error $e');

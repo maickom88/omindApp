@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:omindconsluting/controllers/questions_controller.dart';
-
 import 'cards_list.dart';
-import 'dialog_details.dart';
 
 class Body extends StatelessWidget {
+  final String email;
+  final String uid;
+
+  const Body({Key key, this.email, this.uid}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     final double _height = MediaQuery.of(context).size.height;
@@ -53,21 +55,22 @@ class Body extends StatelessWidget {
               child: GetBuilder<QuestionsController>(
                 init: QuestionsController(),
                 builder: (controller) {
-                  if (controller.questions != null) {
+                  if (controller.questions.length > 0) {
                     return ListView.builder(
                       physics: BouncingScrollPhysics(),
                       itemCount: controller.questions.length,
-                      itemBuilder: (BuildContext context, int index) {
+                      itemBuilder: (context, int index) {
                         return CardsList(
                           titleQuestion:
                               controller.questions[index].data['LifePackName'],
                           desQuestion:
                               controller.questions[index].data['Description'],
+                          documentId: controller.questions[index].documentID,
                         );
                       },
                     );
                   } else {
-                    controller.getQuantQuestions();
+                    controller.getQuantQuestions(email);
                     return Center(
                       child: CircularProgressIndicator(),
                     );

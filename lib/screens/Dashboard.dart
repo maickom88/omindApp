@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+
 final Color backgroundColor = Color(0xFF332a7c);
 
 class TransactionDetails {
@@ -30,18 +31,18 @@ class _MenuDashboardPageState extends State<MenuDashboardPage>
   final _auth = FirebaseAuth.instance;
   FirebaseUser loggedInUser;
 
-  void getCurrentUser() async{
-    try{
+  void getCurrentUser() async {
+    try {
       final user = await _auth.currentUser();
-      if(user != null){
+      if (user != null) {
         loggedInUser = user;
         print(loggedInUser.email);
       }
-    }catch(e){
-        print(e);
+    } catch (e) {
+      print(e);
     }
-
   }
+
   bool isCollapsed = true;
   double screenWidth, screenHeight;
   final Duration duration = const Duration(milliseconds: 200);
@@ -52,7 +53,6 @@ class _MenuDashboardPageState extends State<MenuDashboardPage>
 
   double mainBorderRadius = 0;
   Brightness statusIconColor = Brightness.dark;
-
 
   List<TransactionDetails> yesterdayTransactionsList = [
     new TransactionDetails(
@@ -178,8 +178,8 @@ class _MenuDashboardPageState extends State<MenuDashboardPage>
                                 decoration: BoxDecoration(
                                   shape: BoxShape.circle,
                                   image: DecorationImage(
-                                      image: AssetImage('assets/images/pr.png')
-                                  ),
+                                      image:
+                                          AssetImage('assets/images/pr.png')),
                                 ),
                               ),
                             ),
@@ -497,10 +497,10 @@ class _MenuDashboardPageState extends State<MenuDashboardPage>
   }
 
   Widget transactionList(
-      List<TransactionDetails> transactionList,
-      String strDate, {
-        bool lastElement: false,
-      }) {
+    List<TransactionDetails> transactionList,
+    String strDate, {
+    bool lastElement: false,
+  }) {
     return ListView(
       shrinkWrap: true,
       physics: ClampingScrollPhysics(),
@@ -539,9 +539,7 @@ class _MenuDashboardPageState extends State<MenuDashboardPage>
                 contentPadding: EdgeInsets.fromLTRB(15, 0, 15, 0),
                 leading: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-
-                  ],
+                  children: <Widget>[],
                 ),
                 title: Text(
                   "${_transaction.item}",
@@ -557,7 +555,6 @@ class _MenuDashboardPageState extends State<MenuDashboardPage>
                     fontWeight: FontWeight.w600,
                   ),
                 ),
-
               ),
             );
           },
@@ -582,116 +579,112 @@ class _MenuDashboardPageState extends State<MenuDashboardPage>
           color: Color(0xfff4faff),
           child: SafeArea(
               child: Stack(
+            children: <Widget>[
+              ListView(
+                padding: EdgeInsets.all(0),
+                shrinkWrap: true,
+                physics: ClampingScrollPhysics(),
                 children: <Widget>[
-                  ListView(
-                    padding: EdgeInsets.all(0),
-                    shrinkWrap: true,
-                    physics: ClampingScrollPhysics(),
-                    children: <Widget>[
-                      Container(
-                        padding: const EdgeInsets.only(
-                          top: 5,
-                          bottom: 50,
-                        ),
-                        decoration: BoxDecoration(
-                          color: Colors.white70,
-                          borderRadius: BorderRadius.only(
-                            bottomLeft: Radius.circular(25),
-                            bottomRight: Radius.circular(25),
+                  Container(
+                    padding: const EdgeInsets.only(
+                      top: 5,
+                      bottom: 50,
+                    ),
+                    decoration: BoxDecoration(
+                      color: Colors.white70,
+                      borderRadius: BorderRadius.only(
+                        bottomLeft: Radius.circular(25),
+                        bottomRight: Radius.circular(25),
+                      ),
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Padding(
+                          padding: const EdgeInsets.only(left: 16, right: 16),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            mainAxisSize: MainAxisSize.max,
+                            children: [
+                              IconButton(
+                                icon: Icon(
+                                  Icons.drag_handle,
+                                  color: Colors.black87,
+                                ),
+                                onPressed: () {
+                                  setState(() {
+                                    if (isCollapsed) {
+                                      mainBorderRadius = 30;
+                                      statusIconColor = Brightness.light;
+                                      _controller.forward();
+                                    } else {
+                                      _controller.reverse();
+                                      mainBorderRadius = 0;
+                                      statusIconColor = Brightness.dark;
+                                    }
+                                    isCollapsed = !isCollapsed;
+                                  });
+                                },
+                              ),
+                              Text(
+                                "My Life Packs",
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  color: Colors.black87,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              IconButton(
+                                icon: Icon(
+                                  Icons.add_circle_outline,
+                                  color: Color(0xff1c7bfd),
+                                ),
+                                onPressed: () {
+//                                      Navigator.pushNamed(context,Home.id);
+                                },
+                              ),
+                            ],
                           ),
                         ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Padding(
-                              padding: const EdgeInsets.only(left: 16, right: 16),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                mainAxisSize: MainAxisSize.max,
-                                children: [
-                                  IconButton(
-                                    icon: Icon(
-                                      Icons.drag_handle,
-                                      color: Colors.black87,
-                                    ),
-                                    onPressed: () {
-                                      setState(() {
-                                        if (isCollapsed) {
-                                          mainBorderRadius = 30;
-                                          statusIconColor = Brightness.light;
-                                          _controller.forward();
-                                        } else {
-                                          _controller.reverse();
-                                          mainBorderRadius = 0;
-                                          statusIconColor = Brightness.dark;
-                                        }
-                                        isCollapsed = !isCollapsed;
-                                      });
-                                    },
-                                  ),
-                                  Text(
-                                    "My Life Packs",
-                                    style: TextStyle(
-                                      fontSize: 20,
-                                      color: Colors.black87,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  IconButton(
-                                    icon: Icon(
-                                      Icons.add_circle_outline,
-                                      color: Color(0xff1c7bfd),
-                                    ),
-                                    onPressed: () {
-//                                      Navigator.pushNamed(context,Home.id);
-                                    },
-                                  ),
-                                ],
-                              ),
-                            ),
-                            SizedBox(height: 10),
-
-                          ],
-                        ),
-                      ),
-                      Container(
-                        padding: const EdgeInsets.only(bottom: 10),
-                        child: ListView(
-                          shrinkWrap: true,
-                          physics: ClampingScrollPhysics(),
-                          children: <Widget>[
-                            SizedBox(height: 15),
-                            Container(
-                              padding: EdgeInsets.only(
-                                bottom: 16,
-                                left: 16,
-                                right: 16,
-                              ),
-                              child: ListView(
-                                physics: ClampingScrollPhysics(),
-                                padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                                shrinkWrap: true,
-                                children: <Widget>[
-                                  Row(
-                                    mainAxisSize: MainAxisSize.max,
-                                    mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                    children: <Widget>[
-
-                                    ],
-                                  ),
-
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
+                        SizedBox(height: 10),
+                      ],
+                    ),
                   ),
-                  bottomBar(),
+                  Container(
+                    padding: const EdgeInsets.only(bottom: 10),
+                    child: ListView(
+                      shrinkWrap: true,
+                      physics: ClampingScrollPhysics(),
+                      children: <Widget>[
+                        SizedBox(height: 15),
+                        Container(
+                          padding: EdgeInsets.only(
+                            bottom: 16,
+                            left: 16,
+                            right: 16,
+                          ),
+                          child: ListView(
+                            physics: ClampingScrollPhysics(),
+                            padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                            shrinkWrap: true,
+                            children: <Widget>[
+                              Row(
+                                mainAxisSize: MainAxisSize.max,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: <Widget>[],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                 ],
-              )),
+              ),
+              bottomBar(),
+            ],
+          )),
         ),
       ),
     );

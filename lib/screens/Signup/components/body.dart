@@ -1,4 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:omindconsluting/Screens/Login/login_screen.dart';
 import 'package:omindconsluting/Screens/Signup/components/background.dart';
 import 'package:omindconsluting/Screens/Signup/components/or_divider.dart';
@@ -8,12 +10,14 @@ import 'package:omindconsluting/components/rounded_button.dart';
 import 'package:omindconsluting/components/rounded_input_field.dart';
 import 'package:omindconsluting/components/rounded_password_field.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:omindconsluting/screens/Dashboard.dart';
+import 'package:omindconsluting/screens/dashboard/dashboard_user.dart';
 
 class Body extends StatelessWidget {
   final _auth = FirebaseAuth.instance;
+
   String email;
   String password;
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -50,9 +54,19 @@ class Body extends StatelessWidget {
 //              print(password);
                 try {
                   final newUser = await _auth.createUserWithEmailAndPassword(
-                      email: email, password: password);
+                    email: email,
+                    password: password,
+                  );
+                  Firestore.instance.collection('Users').document().setData(
+                      {'email': email, 'idReference': newUser.user.uid});
                   if (newUser != null) {
-                    Navigator.pushNamed(context, MenuDashboardPage.id);
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => DashboardUser(
+                            email: newUser.user.email, uid: newUser.user.uid),
+                      ),
+                    );
                   }
                 } catch (e) {
                   print(e);
@@ -78,16 +92,22 @@ class Body extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 SocalIcon(
-                  iconSrc: "assets/icons/facebook.svg",
-                  press: () {},
-                ),
-                SocalIcon(
-                  iconSrc: "assets/icons/twitter.svg",
-                  press: () {},
-                ),
-                SocalIcon(
                   iconSrc: "assets/icons/google-plus.svg",
-                  press: () {},
+                  press: () {
+                    handleSignIn().then((FirebaseUser user) {
+                      Firestore.instance.collection('Users').document().setData(
+                          {'email': user.email, 'idReference': user.uid});
+                      if (user != null) {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                DashboardUser(email: user.email, uid: user.uid),
+                          ),
+                        );
+                      }
+                    }).catchError((e) => print(e));
+                  },
                 ),
               ],
             )
@@ -95,5 +115,32 @@ class Body extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Future<FirebaseUser> handleSignIn() async {
+    try {
+      var googleSignIn = GoogleSignIn();
+
+      var googleSignInAccount = await googleSignIn.signIn();
+
+      var googleSignInAuthentication = await googleSignInAccount.authentication;
+
+      FirebaseUser firebaseUser;
+
+      if (googleSignInAuthentication.accessToken != null) {
+        var credential = GoogleAuthProvider.getCredential(
+            idToken: googleSignInAuthentication.idToken,
+            accessToken: googleSignInAuthentication.accessToken);
+
+        await _auth.signInWithCredential(credential).then((auth) {
+          firebaseUser = auth.user;
+        });
+      }
+      print(firebaseUser.email);
+      return firebaseUser;
+    } catch (e) {
+      print("Erro $e");
+      return null;
+    }
   }
 }

@@ -1,4 +1,4 @@
-
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:omindconsluting/Screens/Login/components/background.dart';
 import 'package:omindconsluting/Screens/Signup/signup_screen.dart';
@@ -8,10 +8,16 @@ import 'package:omindconsluting/components/rounded_input_field.dart';
 import 'package:omindconsluting/components/rounded_password_field.dart';
 import 'package:omindconsluting/screens/dashboard/dashboard_user.dart';
 
-class Body extends StatelessWidget {
-  const Body({
-    Key key,
-  }) : super(key: key);
+class Body extends StatefulWidget {
+  @override
+  _BodyState createState() => _BodyState();
+}
+
+class _BodyState extends State<Body> {
+  final _auth = FirebaseAuth.instance;
+
+  String email;
+  String password;
 
   @override
   Widget build(BuildContext context) {
@@ -33,14 +39,37 @@ class Body extends StatelessWidget {
             SizedBox(height: size.height * 0.03),
             RoundedInputField(
               hintText: "Your Email",
-              onChanged: (value) {},
+              onChanged: (value) {
+                email = value;
+              },
             ),
             RoundedPasswordField(
-              onChanged: (value) {},
+              onChanged: (value) {
+                password = value;
+              },
             ),
             RoundedButton(
               text: "LOGIN",
-              press: () {
+              press: () async {
+                try {
+                  AuthResult user =
+                      await FirebaseAuth.instance.signInWithEmailAndPassword(
+                    email: email,
+                    password: password,
+                  );
+                  if (user != null) {
+                    print(user.user.email);
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => DashboardUser(
+                            email: user.user.email, uid: user.user.uid),
+                      ),
+                    );
+                  }
+                } catch (e) {
+                  print('Error ${e.toString()}');
+                }
                 Navigator.push(
                   context,
                   MaterialPageRoute(
