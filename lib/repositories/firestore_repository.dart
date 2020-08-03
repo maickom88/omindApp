@@ -8,8 +8,8 @@ class FirestoreRepository extends IFirestoreRepository {
           .collection('Lifepacks')
           .document(documentId)
           .collection('Questions')
-          .document('vRawzyDZxZcDe0g03xlk')
-          .snapshots();
+          .getDocuments()
+          .then((value) => value.documents);
     } catch (e) {
       print('error $e');
       return null;
@@ -22,5 +22,26 @@ class FirestoreRepository extends IFirestoreRepository {
         .getDocuments()
         .then((value) => value.documents);
     return n;
+  }
+
+  bool saveRes(res, idLifepacks, idQuestion, idUser, resQuestion) {
+    try {
+      Firestore.instance
+          .collection('Lifepacks')
+          .document(idLifepacks)
+          .collection('Questions')
+          .document(idQuestion)
+          .collection('Answers')
+          .document()
+          .setData({
+        'answers': res,
+        'idReference': idUser,
+        'CorrectAnswer': resQuestion
+      });
+      return true;
+    } catch (e) {
+      print("Error $e");
+      return false;
+    }
   }
 }

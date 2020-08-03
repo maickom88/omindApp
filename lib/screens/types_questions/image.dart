@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:omindconsluting/components/rounded_button.dart';
+import 'package:omindconsluting/components/rounded_input_field.dart';
+import 'package:omindconsluting/controllers/questions_controller.dart';
 
 class ImageQuestions extends StatelessWidget {
   final String blankTextQuestion;
@@ -11,7 +14,6 @@ class ImageQuestions extends StatelessWidget {
       : super(key: key);
   @override
   Widget build(BuildContext context) {
-    print(options);
     return Column(
       children: <Widget>[
         Image.network(
@@ -19,23 +21,60 @@ class ImageQuestions extends StatelessWidget {
           height: 250,
         ),
         SizedBox(height: 10),
-        if (blankTextQuestion == null)
-          for (var i = 0; i < options.length; i++)
-            optionsQuestions("Option${i + 1}: ${options[i]}"),
-        if (blankTextQuestion != null) blankQuestion(blankTextQuestion),
+        blankTextQuestion != null
+            ? blankQuestion(blankTextQuestion)
+            : SizedBox(
+                width: double.infinity,
+                height: 270,
+                child: ListView.builder(
+                  itemCount: options.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return GetBuilder<QuestionsController>(
+                        init: QuestionsController(),
+                        builder: (controller) {
+                          return RoundedButton(
+                            text: options[index],
+                            press: () async {
+                              controller.resUser = options[index];
+                              controller.btnChangeColor();
+                            },
+                            color: controller.resUser == options[index]
+                                ? controller.color
+                                : Colors.black87,
+                          );
+                        });
+                  },
+                ),
+              ),
       ],
     );
   }
 
-  Text blankQuestion(String text) {
-    return Text(text);
+  blankQuestion(String text) {
+    return GetBuilder<QuestionsController>(
+        init: QuestionsController(),
+        builder: (controller) {
+          return RoundedInputField(
+            hintText: text,
+            icon: Icons.question_answer,
+            onChanged: (value) => controller.resUser = value,
+          );
+        });
   }
 
-  RoundedButton optionsQuestions(String text) {
-    return RoundedButton(
-      text: text,
-      press: () async {},
-      color: Colors.black87,
-    );
+  optionsQuestions(String text, Color color) {
+    return GetBuilder<QuestionsController>(
+        init: QuestionsController(),
+        builder: (controller) {
+          return RoundedButton(
+            text: text,
+            press: () async {
+              controller.resUser = text;
+              controller.btnChangeColor();
+              print(text);
+            },
+            color: color ?? Colors.black87,
+          );
+        });
   }
 }

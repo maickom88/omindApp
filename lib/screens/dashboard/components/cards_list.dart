@@ -9,13 +9,15 @@ class CardsList extends StatefulWidget {
   final String titleQuestion;
   final String desQuestion;
   final String documentId;
+  final String uid;
 
   const CardsList(
       {Key key,
       this.press,
       this.titleQuestion,
       this.desQuestion,
-      this.documentId})
+      this.documentId,
+      this.uid})
       : super(key: key);
 
   @override
@@ -29,12 +31,13 @@ class _CardsListState extends State<CardsList> {
       color: Color(0xFFDB9B10),
       child: ListTile(
         onTap: () {
+          print(widget.uid);
           QuestionsController.to.getQuestions(widget.documentId);
           Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) =>
-                    QuestionPage(documentID: widget.documentId),
+                builder: (context) => QuestionPage(
+                    documentID: widget.documentId, userId: widget.uid),
               ));
         },
         leading: IconButton(

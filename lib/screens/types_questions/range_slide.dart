@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_xlider/flutter_xlider.dart';
+import 'package:get/get.dart';
+import 'package:omindconsluting/controllers/questions_controller.dart';
 
 class RangeSlide extends StatelessWidget {
   final double valueInitial;
@@ -14,28 +16,36 @@ class RangeSlide extends StatelessWidget {
     return Container(
       width: 300,
       height: 100,
-      child: Column(
-        children: <Widget>[
-          FlutterSlider(
-            values: [1, 5, 10],
-            max: 10,
-            min: 1,
-            trackBar: FlutterSliderTrackBar(
-              activeDisabledTrackBarColor: Colors.orange,
-              activeTrackBar: BoxDecoration(color: Colors.transparent),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 15),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      child: GetBuilder<QuestionsController>(
+          init: QuestionsController(),
+          builder: (controller) {
+            return Column(
               children: <Widget>[
-                for (var i = 0; i < valueFinal; i++) texts(i + 1),
+                FlutterSlider(
+                  values: [valueInitial, valueFinal],
+                  max: valueFinal,
+                  min: valueInitial,
+                  onDragging: (index, down, upp) {
+                    print('$index $down $upp');
+                    controller.resUser = down;
+                  },
+                  trackBar: FlutterSliderTrackBar(
+                    activeDisabledTrackBarColor: Colors.orange,
+                    activeTrackBar: BoxDecoration(color: Colors.transparent),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 15),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      for (var i = 0; i < valueFinal; i++) texts(i + 1),
+                    ],
+                  ),
+                )
               ],
-            ),
-          )
-        ],
-      ),
+            );
+          }),
     );
   }
 

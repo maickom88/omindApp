@@ -61,6 +61,7 @@ class Body extends StatelessWidget {
                       itemCount: controller.questions.length,
                       itemBuilder: (context, int index) {
                         return CardsList(
+                          uid: uid,
                           titleQuestion:
                               controller.questions[index].data['LifePackName'],
                           desQuestion:
@@ -70,7 +71,7 @@ class Body extends StatelessWidget {
                       },
                     );
                   } else {
-                    controller.getQuantQuestions(email);
+                    controller.getQuantQuestions(email, uid);
                     return Center(
                       child: CircularProgressIndicator(),
                     );

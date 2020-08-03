@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:omindconsluting/constTypes.dart';
 import 'package:omindconsluting/controllers/questions_controller.dart';
+import 'package:omindconsluting/screens/types_questions/audio.dart';
 import 'package:omindconsluting/screens/types_questions/image.dart';
 import 'package:omindconsluting/screens/types_questions/mcq.dart';
 import 'package:omindconsluting/screens/types_questions/range_slide.dart';
@@ -11,22 +12,23 @@ import 'package:omindconsluting/screens/Login/components/background.dart';
 
 class QuestionPage extends StatelessWidget {
   final String documentID;
+  final String userId;
 
-  const QuestionPage({Key key, this.documentID}) : super(key: key);
+  const QuestionPage({Key key, this.documentID, this.userId}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<QuestionsController>(
-        init: QuestionsController(),
-        builder: (controller) {
-          if (controller.questionsData != null) {
-            if (controller.questionsData.data != null) {
-              return Scaffold(
-                backgroundColor: Colors.white,
-                body: Background(
-                  child: SingleChildScrollView(
-                    child: Padding(
-                      padding: const EdgeInsets.all(15),
-                      child: Column(
+    return Scaffold(
+      backgroundColor: Colors.white,
+      body: Background(
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(15),
+            child: GetBuilder<QuestionsController>(
+                init: QuestionsController(),
+                builder: (controller) {
+                  if (controller.questionsData != null) {
+                    if (controller.questionsData.data != null) {
+                      return Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: <Widget>[
@@ -66,23 +68,41 @@ class QuestionPage extends StatelessWidget {
                                           imageQuestion: controller
                                               .questionsData.data["image"],
                                         )
-                                      : Text('olá'),
+                                      : AudioQuesitons(
+                                          options: controller.questionsData
+                                              .data["listOptions"],
+                                          blankTextQuestion: controller
+                                              .questionsData
+                                              .data["blankQuestion"],
+                                        ),
                           SizedBox(height: 40),
-                          RoundedButton(text: "SEND", press: () async {}),
+                          RoundedButton(
+                              text: "SEND",
+                              press: () async {
+                                controller.sendQuestion(
+                                    documentID,
+                                    controller.questionsData.documentID,
+                                    controller.questionsData.data["answer"],
+                                    context);
+                              }),
                         ],
-                      ),
-                    ),
-                  ),
-                ),
-              );
-            } else {
-              controller.getQuestions(documentID);
-              return Center(child: CircularProgressIndicator());
-            }
-          } else {
-            controller.getQuestions(documentID);
-            return Center(child: CircularProgressIndicator());
-          }
-        });
+                      );
+                    } else {
+                      controller.getQuestions(documentID);
+                      return Center(child: CircularProgressIndicator());
+                    }
+                  } else if (controller.questionsList == null) {
+                    return Center(
+                      child: Text('There are no questions!'),
+                    );
+                  } else {
+                    controller.getQuestions(documentID);
+                    return Center(child: CircularProgressIndicator());
+                  }
+                }),
+          ),
+        ),
+      ),
+    );
   }
 }
