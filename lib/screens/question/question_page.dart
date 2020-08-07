@@ -47,6 +47,12 @@ class QuestionPage extends StatelessWidget {
                           controller.questionsData.data["type"] ==
                                   ConstTypes.rangSlidQuestion
                               ? RangeSlide(
+                                  valueStringInitial: controller
+                                      .questionsData.data["valueStringInitial"],
+                                  valueStringMedium: controller
+                                      .questionsData.data["valueStringMedium"],
+                                  valueStringFinal: controller
+                                      .questionsData.data["valueStringFinal"],
                                   valueInitial: double.parse(controller
                                       .questionsData.data["valueInitial"]),
                                   valueFinal: double.parse(controller
@@ -77,14 +83,60 @@ class QuestionPage extends StatelessWidget {
                                         ),
                           SizedBox(height: 40),
                           RoundedButton(
-                              text: "SEND",
-                              press: () async {
-                                controller.sendQuestion(
-                                    documentID,
-                                    controller.questionsData.documentID,
-                                    controller.questionsData.data["answer"],
-                                    context);
-                              }),
+                            text: "SEND",
+                            press: () async {
+                              controller.sendQuestion(
+                                  documentID,
+                                  controller.questionsData.documentID,
+                                  controller.questionsData.data["answer"],
+                                  context);
+                            },
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Container(
+                                width: 130,
+                                child: RoundedButton(
+                                  text: "BACK",
+                                  color: Colors.black87,
+                                  press: () async {
+                                    if (controller.indexActual != null) {
+                                      if (controller.indexActual > 1) {
+                                        controller.indexActual -= 1;
+                                        print(controller.questionsList[
+                                            controller.indexActual - 1]);
+                                        print(controller.indexActual);
+                                        controller.questionsData =
+                                            controller.questionsList[
+                                                (controller.indexActual - 1)];
+
+                                        controller.update();
+                                      }
+                                    }
+                                  },
+                                ),
+                              ),
+                              Container(
+                                width: 130,
+                                child: RoundedButton(
+                                  text: "SKIP",
+                                  color: Colors.black87,
+                                  press: () async {
+                                    print(controller.indexActual);
+                                    print(controller.questionsList.length);
+                                    if (controller.questionsList.length >
+                                        controller.indexActual) {
+                                      controller.questionsData =
+                                          controller.questionsList[
+                                              controller.indexActual++];
+                                      controller.update();
+                                    }
+                                  },
+                                ),
+                              ),
+                            ],
+                          ),
                         ],
                       );
                     } else {

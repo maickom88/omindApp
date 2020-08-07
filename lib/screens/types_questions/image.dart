@@ -19,6 +19,23 @@ class ImageQuestions extends StatelessWidget {
         Image.network(
           imageQuestion,
           height: 250,
+          loadingBuilder: (BuildContext context, Widget child,
+              ImageChunkEvent loadingProgress) {
+            if (loadingProgress == null) {
+              return Center(
+                child: child,
+              );
+            } else {
+              return Center(
+                child: CircularProgressIndicator(
+                  value: loadingProgress.expectedTotalBytes != null
+                      ? loadingProgress.cumulativeBytesLoaded /
+                          loadingProgress.expectedTotalBytes
+                      : null,
+                ),
+              );
+            }
+          },
         ),
         SizedBox(height: 10),
         blankTextQuestion != null

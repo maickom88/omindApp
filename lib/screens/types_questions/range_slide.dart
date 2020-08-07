@@ -6,8 +6,17 @@ import 'package:omindconsluting/controllers/questions_controller.dart';
 class RangeSlide extends StatelessWidget {
   final double valueInitial;
   final double valueFinal;
+  final String valueStringInitial;
+  final String valueStringMedium;
+  final String valueStringFinal;
 
-  const RangeSlide({Key key, this.valueInitial, this.valueFinal})
+  const RangeSlide(
+      {Key key,
+      this.valueInitial,
+      this.valueFinal,
+      this.valueStringInitial,
+      this.valueStringMedium,
+      this.valueStringFinal})
       : super(key: key);
 
   @override
@@ -22,11 +31,11 @@ class RangeSlide extends StatelessWidget {
             return Column(
               children: <Widget>[
                 FlutterSlider(
-                  values: [valueInitial, valueFinal],
+                  centeredOrigin: true,
+                  values: [(valueFinal / 2).roundToDouble()],
                   max: valueFinal,
                   min: valueInitial,
                   onDragging: (index, down, upp) {
-                    print('$index $down $upp');
                     controller.resUser = down;
                   },
                   trackBar: FlutterSliderTrackBar(
@@ -34,15 +43,47 @@ class RangeSlide extends StatelessWidget {
                     activeTrackBar: BoxDecoration(color: Colors.transparent),
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 15),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      for (var i = 0; i < valueFinal; i++) texts(i + 1),
-                    ],
+                // Padding(
+                //   padding: const EdgeInsets.symmetric(horizontal: 15),
+                //   child: Row(
+                //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                //     children: <Widget>[
+                //       for (var i = 0; i < valueFinal; i++) texts(i + 1),
+                //     ],
+                //   ),
+                // ),
+                Visibility(
+                  visible: valueStringInitial != null ? true : false,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 15),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          valueStringInitial,
+                          style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Text(
+                          valueStringMedium,
+                          style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Text(
+                          valueStringFinal,
+                          style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                )
+                ),
               ],
             );
           }),

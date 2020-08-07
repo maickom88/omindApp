@@ -10,6 +10,7 @@ class CardsList extends StatefulWidget {
   final String desQuestion;
   final String documentId;
   final String uid;
+  final String email;
 
   const CardsList(
       {Key key,
@@ -17,7 +18,8 @@ class CardsList extends StatefulWidget {
       this.titleQuestion,
       this.desQuestion,
       this.documentId,
-      this.uid})
+      this.uid,
+      this.email})
       : super(key: key);
 
   @override
@@ -38,7 +40,12 @@ class _CardsListState extends State<CardsList> {
               MaterialPageRoute(
                 builder: (context) => QuestionPage(
                     documentID: widget.documentId, userId: widget.uid),
-              ));
+              )).then((value) {
+            QuestionsController.to.questionsData = null;
+            QuestionsController.to.questionsList = null;
+            QuestionsController.to.getQuantQuestions(widget.email, widget.uid);
+            QuestionsController.to.getQuestions(widget.documentId);
+          });
         },
         leading: IconButton(
           icon: Icon(

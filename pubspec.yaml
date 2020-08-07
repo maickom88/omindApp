@@ -31,21 +31,20 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^0.1.3
   google_fonts: ^0.3.5
-  flutter_svg:
   firebase_core: ^0.4.4+3
   firebase_auth: ^0.16.1
   cloud_firestore: ^0.13.5
   google_sign_in: ^4.5.1
   assets_audio_player: ^2.0.9+2
-  fl_chart:
-
+  fl_chart: null
+  flutter_svg: ^0.18.0
+  curved_drawer: ^0.1.2
 dev_dependencies:
   flutter_test:
     sdk: flutter
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
-
 # The following section is specific to Flutter.
 flutter:
   # The following line ensures that the Material Icons font is
