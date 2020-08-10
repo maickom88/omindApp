@@ -6,6 +6,7 @@ import 'package:omindconsluting/screens/types_questions/audio.dart';
 import 'package:omindconsluting/screens/types_questions/image.dart';
 import 'package:omindconsluting/screens/types_questions/mcq.dart';
 import 'package:omindconsluting/screens/types_questions/range_slide.dart';
+import 'package:omindconsluting/screens/types_questions/timer.dart';
 import './components/question_text.dart';
 import 'package:omindconsluting/components/rounded_button.dart';
 import 'package:omindconsluting/screens/Login/components/background.dart';
@@ -74,13 +75,23 @@ class QuestionPage extends StatelessWidget {
                                           imageQuestion: controller
                                               .questionsData.data["image"],
                                         )
-                                      : AudioQuesitons(
-                                          options: controller.questionsData
-                                              .data["listOptions"],
-                                          blankTextQuestion: controller
-                                              .questionsData
-                                              .data["blankQuestion"],
-                                        ),
+                                      : controller.questionsData.data["type"] ==
+                                              ConstTypes.timerQuestions
+                                          ? TimerQuestion(
+                                              options: controller.questionsData
+                                                  .data["listOptions"],
+                                              timer: int.parse(
+                                                controller.questionsData
+                                                    .data['timer'],
+                                              ),
+                                            )
+                                          : AudioQuesitons(
+                                              options: controller.questionsData
+                                                  .data["listOptions"],
+                                              blankTextQuestion: controller
+                                                  .questionsData
+                                                  .data["blankQuestion"],
+                                            ),
                           SizedBox(height: 40),
                           RoundedButton(
                             text: "SEND",
@@ -98,9 +109,16 @@ class QuestionPage extends StatelessWidget {
                               Container(
                                 width: 130,
                                 child: RoundedButton(
-                                  text: "BACK",
+                                  text: controller.indexActual == 1 ||
+                                          controller.indexActual == 0
+                                      ? "EXIT"
+                                      : "BACK",
                                   color: Colors.black87,
                                   press: () async {
+                                    if (controller.indexActual == 1 ||
+                                        controller.indexActual == 0) {
+                                      Navigator.pop(context);
+                                    }
                                     if (controller.indexActual != null) {
                                       if (controller.indexActual > 1) {
                                         controller.indexActual -= 1;
@@ -120,11 +138,16 @@ class QuestionPage extends StatelessWidget {
                               Container(
                                 width: 130,
                                 child: RoundedButton(
-                                  text: "SKIP",
+                                  text: controller.indexActual >=
+                                          controller.questionsList.length
+                                      ? "DONE"
+                                      : "SKIP",
                                   color: Colors.black87,
                                   press: () async {
-                                    print(controller.indexActual);
-                                    print(controller.questionsList.length);
+                                    if (controller.indexActual >=
+                                        controller.questionsList.length) {
+                                      Navigator.pop(context);
+                                    }
                                     if (controller.questionsList.length >
                                         controller.indexActual) {
                                       controller.questionsData =

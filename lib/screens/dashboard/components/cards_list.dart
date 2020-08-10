@@ -43,8 +43,13 @@ class _CardsListState extends State<CardsList> {
               )).then((value) {
             QuestionsController.to.questionsData = null;
             QuestionsController.to.questionsList = null;
+            QuestionsController.to.onStart();
             QuestionsController.to.getQuantQuestions(widget.email, widget.uid);
             QuestionsController.to.getQuestions(widget.documentId);
+            QuestionsController.to.indexActual = 1;
+            QuestionsController.to.update();
+
+            print('Volteiiii');
           });
         },
         leading: IconButton(

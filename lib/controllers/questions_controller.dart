@@ -93,7 +93,9 @@ class QuestionsController extends GetxController {
         }
         try {
           questionsData = questionsList[(index + 1)];
-          indexActual = (index + 1);
+          indexActual++;
+          print(
+              'o index atual é $indexActual  e a lista é $questionsList.lenght  ');
           update();
         } catch (e) {
           questionsData = null;
