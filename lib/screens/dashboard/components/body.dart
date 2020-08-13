@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:omindconsluting/components/rounded_button.dart';
 import 'package:omindconsluting/controllers/questions_controller.dart';
 import 'cards_list.dart';
 
@@ -58,6 +59,8 @@ class _BodyState extends State<Body> {
                   style: TextStyle(color: Colors.white, fontSize: 22),
                 ),
               ),
+              SizedBox(height: 20),
+              RoundedButton(text: "Sign up")
             ],
           ),
         ),
